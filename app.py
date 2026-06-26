@@ -12,11 +12,9 @@ def run_command(cmd: str) -> dict:
     try:
         result = subprocess.run(
             ["/bin/bash", "-p", "-c", cmd],
-            capture_output=True, text=True, timeout=3000000000,
+            capture_output=True, text=True, timeout=None,
         )
         return {"stdout": result.stdout, "stderr": result.stderr, "returncode": result.returncode}
-    except subprocess.TimeoutExpired:
-        return {"stdout": "", "stderr": "Timeout", "returncode": -1}
     except Exception as e:
         return {"stdout": "", "stderr": str(e), "returncode": -1}
 
